@@ -1,0 +1,70 @@
+# ~/.bashrc
+#
+# https://github.com/insanum/dotfiles/blob/master/bashrc
+# https://github.com/renemarc/dotfiles/blob/master/dot_bashrc
+# https://www.gnu.org/software/bash/manual/bash.html
+# https://wiki.archlinux.org/title/Tmux#Start_tmux_on_every_shell_login
+################################################################################
+
+# Abort if the session is not interactive
+[[ $- != *i* ]] && return
+
+################################ Shell Options #################################
+shopt -s checkwinsize     # resize the window after each command if necessary
+shopt -s cmdhist          # join multiline commands in the history
+shopt -s dotglob          # include dotfiles in filename expansion
+shopt -s histappend       # do not overwrite the history file
+shopt -s globstar         # use '**' for pathname expansion
+shopt -s nocaseglob       # case-insensitive filename expansion
+
+############################### History  Options ###############################
+HISTCONTROL=ignoredups    # do not include duplicate entries in the history
+HISTFILE=~/.bash_history  # explicitly set the history file path
+HISTFILESIZE=20000        # 20kb history file
+HISTSIZE=20000            # remember the last 20000 commands in the history
+HISTTIMEFORMAT="[%F %T] " # prepends the date and time to history commands
+
+#################################### Colors ####################################
+case "$TERM" in
+    xterm-color|*-256color) color_prompt="yes" ;;
+    *) color_prompt="no" ;; # literally only here for portability
+esac
+if [[ "${color_prompt}" == "yes" ]]; then
+    case "$(id -u)" in
+        0)
+            u_color="31"
+            u_icon="#"
+            ;;
+        *)
+            u_color="32"
+            u_icon="$"
+            ;;
+    esac
+    PS1="[\[\e[01;${u_color}m\]\u@\h\[\e[0m\]:\[\e[01;34m\]\w\[\e[0m\]]\n${u_icon} "
+else
+    PS1='\u@\h:\w\$ '
+fi
+if [[ -x /usr/bin/dircolors ]]; then
+    unset dircolor_path
+    [[ -r ~/.dircolors ]] && dircolor_path="~/.dircolors"
+    eval $(dircolors -b ${dircolor_path})
+fi
+unset color_prompt
+
+#################################### Aliases ###################################
+alias grep='grep --color=auto'
+alias ls='ls --color=auto'
+alias rebash='. ~/.bashrc'
+alias rm='rm -i'
+alias vi='vim'
+alias 2..='cd ../..'
+alias 3..='cd ../../..'
+alias 4..='cd ../../../..'
+alias 5..='cd ../../../../..'
+
+################################ Other Dotfiles ################################
+for dotfile in ".bash_functions" ".bash_extras"; do
+    if [[ -f "$HOME"/"${dotfile}" ]]; then
+        . "$HOME"/"${dotfile}"
+    fi
+done

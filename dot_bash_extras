@@ -1,0 +1,4 @@
+##################################### Tmux #####################################
+if [ -x "$(command -v tmux)" ] && [ -z "${TMUX}" ]; then
+    exec tmux new-session -A -s ${USER} &>/dev/null
+fi
