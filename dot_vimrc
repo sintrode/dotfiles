@@ -1,32 +1,19 @@
-# prevent terminal request sequence
-set -sg escape-time 50
+" General
+set nocompatible
+filetype on
+set ruler
+set number
+set title
 
-# easy reloads
-bind r source-file ~/.tmux.conf
+" Colors
+set background=dark
+set termguicolors
+syntax on
+colorscheme palofobsidian
 
-# vi copy mode to make Space start selecting and Enter to copy
-# Paste remains as CTRL+B,]
-setw -g mode-keys vi
-  
-# proper colors
-set -g default-terminal xterm-256color
-set -ga terminal-overrides ",xterm-256color:Tc"
-
-# simplify the status bar and indicate when the prefix is in use
-set -g status-style 'fg=blue'
-set -g status-right '#[fg=red]#(ip addr show eth0 | grep -m 1 "inet" | awk "{print \$2}" | cut -d/ -f1) #[fg=blue]%H:%M'
-set -g status-left '#{?client_prefix,#[bg=blue],}P#[default] '
-
-setw -g window-status-current-style 'fg=white'
-setw -g window-status-current-format '#I:#W#F'
-setw -g window-status-style 'fg=blue dim'
-
-# make window splitting easier to remember
-bind | split-window -h -c "#{pane_current_path}"
-bind - split-window -v -c "#{pane_current_path}"
-unbind '%'
-unbind '"'
-
-set-option -g set-titles on
-set-option -g set-titles-string '#W' # window title
-set -g allow-rename on
+" Spacing
+set autoindent
+set shiftwidth=4
+set tabstop=4
+set softtabstop=4
+set expandtab
